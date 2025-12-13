@@ -1,0 +1,1242 @@
+{
+	"info": {
+		"_postman_id": "ozpolat-insaat-api-collection",
+		"name": "Özpolat İnşaat API",
+		"description": "Özpolat İnşaat Backend API - Tüm endpoint'ler\n\n## Kullanım\n1. Environment'ta `base_url` değişkenini ayarlayın (varsayılan: http://localhost:5001)\n2. Login yaparak token alın\n3. Token otomatik olarak diğer isteklere eklenir\n\n## Auth\n- Şifre: ozpolat2024\n- Token 24 saat geçerli",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5001",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "🔐 Auth",
+			"description": "Kimlik doğrulama işlemleri",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Response'dan token'ı al ve collection variable'a kaydet",
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.token) {",
+									"        pm.collectionVariables.set('token', jsonData.token);",
+									"        console.log('Token kaydedildi!');",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"ozpolat2024\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login"]
+						},
+						"description": "Admin girişi yapar.\n\nBaşarılı girişte token döner ve otomatik olarak kaydedilir."
+					},
+					"response": []
+				},
+				{
+					"name": "Check Auth",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/check",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "check"]
+						},
+						"description": "Token geçerliliğini kontrol eder."
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/auth/logout",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "logout"]
+						},
+						"description": "Çıkış işlemi.\n\nNOT: Frontend'de localStorage'dan token silinmeli."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "🏗️ Projects",
+			"description": "Proje CRUD işlemleri",
+			"item": [
+				{
+					"name": "Get All Projects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/projects",
+							"host": ["{{base_url}}"],
+							"path": ["api", "projects"]
+						},
+						"description": "Tüm projeleri listeler."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Projects by Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/projects?category=devam-eden",
+							"host": ["{{base_url}}"],
+							"path": ["api", "projects"],
+							"query": [
+								{
+									"key": "category",
+									"value": "devam-eden",
+									"description": "devam-eden veya tamamlanan"
+								}
+							]
+						},
+						"description": "Kategoriye göre projeleri filtreler.\n\nKategoriler:\n- devam-eden\n- tamamlanan"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Project by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/projects/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "projects", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "proje-uuid-buraya",
+									"description": "Proje UUID'si"
+								}
+							]
+						},
+						"description": "Tek bir projeyi ID ile getirir."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Project",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Ankara Konut Projesi",
+									"type": "text",
+									"description": "Proje başlığı (zorunlu)"
+								},
+								{
+									"key": "description",
+									"value": "120 daireli modern konut projesi",
+									"type": "text",
+									"description": "Kısa açıklama (zorunlu)"
+								},
+								{
+									"key": "category",
+									"value": "devam-eden",
+									"type": "text",
+									"description": "devam-eden veya tamamlanan (zorunlu)"
+								},
+								{
+									"key": "location",
+									"value": "Ankara, Çankaya",
+									"type": "text",
+									"description": "Proje lokasyonu (zorunlu)"
+								},
+								{
+									"key": "year",
+									"value": "2024",
+									"type": "text",
+									"description": "Proje yılı (zorunlu)"
+								},
+								{
+									"key": "details",
+									"value": "Detaylı proje açıklaması buraya yazılacak...",
+									"type": "text",
+									"description": "Detaylı açıklama (opsiyonel)"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "",
+									"description": "Ana görsel (opsiyonel, 1.5MB üstü sıkıştırılır)"
+								},
+								{
+									"key": "gallery",
+									"type": "file",
+									"src": "",
+									"description": "Galeri görselleri (opsiyonel, maks 20 dosya)"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/projects",
+							"host": ["{{base_url}}"],
+							"path": ["api", "projects"]
+						},
+						"description": "Yeni proje oluşturur.\n\n**Auth gerekli!**\n\n⚡ FormData ile direkt fotoğraf yükle!\n⚡ 1.5MB üstü görseller otomatik sıkıştırılır!\n\nZorunlu alanlar:\n- title\n- description\n- category (devam-eden / tamamlanan)\n- location\n- year\n\nOpsiyonel:\n- details\n- image (ana görsel)\n- gallery (galeri görselleri, birden fazla seçilebilir)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Project",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Güncellenmiş Proje Adı",
+									"type": "text",
+									"description": "Yeni başlık (opsiyonel)"
+								},
+								{
+									"key": "category",
+									"value": "tamamlanan",
+									"type": "text",
+									"description": "Yeni kategori (opsiyonel)"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "",
+									"description": "Yeni ana görsel (eski silinir)"
+								},
+								{
+									"key": "gallery",
+									"type": "file",
+									"src": "",
+									"description": "Yeni galeri görselleri (mevcut galeriye eklenir)"
+								},
+								{
+									"key": "replaceGallery",
+									"value": "false",
+									"type": "text",
+									"description": "true: galeriyi tamamen değiştir, false: ekle"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/projects/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "projects", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "proje-uuid-buraya"
+								}
+							]
+						},
+						"description": "Mevcut projeyi günceller.\n\n**Auth gerekli!**\n\n⚡ FormData ile yeni fotoğraf yükleyebilirsin!\n⚡ Yeni ana görsel yüklenirse eski silinir\n⚡ Galeri görselleri varsayılan olarak eklenir\n⚡ replaceGallery=true ile galeriyi tamamen değiştirebilirsin"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Project",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/projects/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "projects", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "proje-uuid-buraya"
+								}
+							]
+						},
+						"description": "Projeyi siler.\n\n**Auth gerekli!**"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "📰 News",
+			"description": "Haber CRUD işlemleri",
+			"item": [
+				{
+					"name": "Get All News",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/news",
+							"host": ["{{base_url}}"],
+							"path": ["api", "news"]
+						},
+						"description": "Tüm haberleri listeler (tarihe göre sıralı)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get News by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/news/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "news", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "haber-uuid-buraya",
+									"description": "Haber UUID'si veya slug"
+								}
+							]
+						},
+						"description": "Tek bir haberi ID veya slug ile getirir."
+					},
+					"response": []
+				},
+				{
+					"name": "Get News by Slug",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/news/yeni-ihale-kazanildi",
+							"host": ["{{base_url}}"],
+							"path": ["api", "news", "yeni-ihale-kazanildi"]
+						},
+						"description": "Haberi SEO dostu slug ile getirir.\n\nÖrnek slug: yeni-ihale-kazanildi"
+					},
+					"response": []
+				},
+				{
+					"name": "Create News",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Yeni İhale Kazanıldı\",\n    \"content\": \"Şirketimiz Ankara'da yeni bir ihale kazandı. Detaylı haber içeriği buraya yazılacak...\",\n    \"excerpt\": \"Şirketimiz Ankara'da önemli bir ihale kazandı.\",\n    \"date\": \"2024-01-15\",\n    \"image\": \"/uploads/news/ihale.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/news",
+							"host": ["{{base_url}}"],
+							"path": ["api", "news"]
+						},
+						"description": "Yeni haber oluşturur.\n\n**Auth gerekli!**\n\nSlug otomatik oluşturulur (başlıktan).\n\nZorunlu alanlar:\n- title\n- content\n- excerpt\n- date (YYYY-MM-DD)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update News",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Güncellenmiş Haber Başlığı\",\n    \"content\": \"Güncellenmiş içerik...\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/news/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "news", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "haber-uuid-buraya"
+								}
+							]
+						},
+						"description": "Mevcut haberi günceller.\n\n**Auth gerekli!**\n\nBaşlık değişirse slug da güncellenir."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete News",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/news/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "news", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "haber-uuid-buraya"
+								}
+							]
+						},
+						"description": "Haberi siler.\n\n**Auth gerekli!**"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "💼 Careers",
+			"description": "Kariyer ilanı CRUD işlemleri",
+			"item": [
+				{
+					"name": "Get Active Careers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/careers",
+							"host": ["{{base_url}}"],
+							"path": ["api", "careers"]
+						},
+						"description": "Sadece aktif kariyer ilanlarını listeler.\n\nPublic kullanıcılar için."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Careers (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/careers?all=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "careers"],
+							"query": [
+								{
+									"key": "all",
+									"value": "true"
+								}
+							]
+						},
+						"description": "Tüm kariyer ilanlarını listeler (aktif + pasif).\n\nAdmin paneli için."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Career by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/careers/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "careers", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "kariyer-uuid-buraya"
+								}
+							]
+						},
+						"description": "Tek bir kariyer ilanını getirir."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Career",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Şantiye Şefi\",\n    \"department\": \"İnşaat\",\n    \"location\": \"Ankara\",\n    \"type\": \"tam-zamanli\",\n    \"description\": \"Şantiye yönetimi ve koordinasyonundan sorumlu olacak Şantiye Şefi arıyoruz.\",\n    \"requirements\": [\n        \"İnşaat Mühendisliği mezunu\",\n        \"En az 5 yıl deneyim\",\n        \"B sınıfı ehliyet\",\n        \"İyi derecede AutoCAD bilgisi\"\n    ],\n    \"isActive\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/careers",
+							"host": ["{{base_url}}"],
+							"path": ["api", "careers"]
+						},
+						"description": "Yeni kariyer ilanı oluşturur.\n\n**Auth gerekli!**\n\nZorunlu alanlar:\n- title\n- department\n- location\n- type (tam-zamanli / yari-zamanli / staj)\n- description\n- requirements (string array)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Career",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"isActive\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/careers/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "careers", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "kariyer-uuid-buraya"
+								}
+							]
+						},
+						"description": "Kariyer ilanını günceller.\n\n**Auth gerekli!**\n\nÖrnek: İlanı pasife almak için isActive: false gönderin."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Career",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/careers/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "careers", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "kariyer-uuid-buraya"
+								}
+							]
+						},
+						"description": "Kariyer ilanını siler.\n\n**Auth gerekli!**"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "⚙️ Settings",
+			"description": "Site ayarları ve hero slider işlemleri\n\n⚡ FormData ile slider görselleri yüklenebilir!",
+			"item": [
+				{
+					"name": "Get Settings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/settings",
+							"host": ["{{base_url}}"],
+							"path": ["api", "settings"]
+						},
+						"description": "Site ayarlarını getirir.\n\nHero slides dahil.\n\nİlk istekte varsayılan değerlerle oluşturulur."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Settings (FormData)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "companyName",
+									"value": "Özpolat İnşaat A.Ş.",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "+90 312 123 45 67",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "info@ozpolatinsaat.com",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "Kavaklıdere, Ankara",
+									"type": "text"
+								},
+								{
+									"key": "workingHours",
+									"value": "Pazartesi - Cuma: 09:00 - 18:00",
+									"type": "text"
+								},
+								{
+									"key": "socialMedia",
+									"value": "{\"facebook\":\"https://facebook.com/ozpolat\",\"instagram\":\"https://instagram.com/ozpolat\"}",
+									"type": "text",
+									"description": "JSON string olarak"
+								},
+								{
+									"key": "stats",
+									"value": "{\"experience\":25,\"ongoingProjects\":8,\"completedProjects\":200}",
+									"type": "text",
+									"description": "JSON string olarak"
+								},
+								{
+									"key": "aboutText",
+									"value": "Özpolat İnşaat olarak 25 yıldır...",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/settings",
+							"host": ["{{base_url}}"],
+							"path": ["api", "settings"]
+						},
+						"description": "Site ayarlarını günceller.\n\n**Auth gerekli!**\n\nPartial update - sadece değiştirmek istediğiniz alanları gönderin.\n\nsocialMedia ve stats alanları JSON string olarak gönderilmeli."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Settings with Hero Slides",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "heroSlides",
+									"value": "[{\"title\":\"Güvenle İnşa Ediyoruz\",\"subtitle\":\"KURUMSAL\",\"description\":\"25 yıllık tecrübe\",\"ctaText\":\"Hakkımızda\",\"ctaLink\":\"/kurumsal\"},{\"title\":\"Projelerimiz\",\"subtitle\":\"200+ PROJE\",\"description\":\"Projelerimizi inceleyin\",\"ctaText\":\"Projeler\",\"ctaLink\":\"/projeler\"}]",
+									"type": "text",
+									"description": "JSON array string - slide verileri"
+								},
+								{
+									"key": "heroImages",
+									"type": "file",
+									"src": "",
+									"description": "1. slide görseli (sırayla eşleşir)"
+								},
+								{
+									"key": "heroImages",
+									"type": "file",
+									"src": "",
+									"description": "2. slide görseli"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/settings",
+							"host": ["{{base_url}}"],
+							"path": ["api", "settings"]
+						},
+						"description": "Hero slider'ı fotoğraflarla birlikte günceller.\n\n**Auth gerekli!**\n\n⚡ FormData ile direkt fotoğraf yükle!\n⚡ 1.5MB üstü görseller sıkıştırılır!\n\nheroSlides: JSON array string\nheroImages: Dosyalar (heroSlides sırasına göre eşleşir)"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Hero Slide",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Yeni Slide Başlığı",
+									"type": "text",
+									"description": "Zorunlu"
+								},
+								{
+									"key": "subtitle",
+									"value": "ALT BAŞLIK",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Slide açıklaması...",
+									"type": "text"
+								},
+								{
+									"key": "ctaText",
+									"value": "Detaylar",
+									"type": "text"
+								},
+								{
+									"key": "ctaLink",
+									"value": "/detay",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "",
+									"description": "Slider görseli"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/settings/hero-slide",
+							"host": ["{{base_url}}"],
+							"path": ["api", "settings", "hero-slide"]
+						},
+						"description": "Yeni hero slide ekler (mevcut slide'ların sonuna).\n\n**Auth gerekli!**\n\n⚡ FormData ile direkt görsel yükle!"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Hero Slide",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Güncellenmiş Başlık",
+									"type": "text"
+								},
+								{
+									"key": "order",
+									"value": "0",
+									"type": "text",
+									"description": "Sıra numarası"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "",
+									"description": "Yeni görsel (eski silinir)"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/settings/hero-slide/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "settings", "hero-slide", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "slide-uuid-buraya"
+								}
+							]
+						},
+						"description": "Mevcut hero slide'ı günceller.\n\n**Auth gerekli!**\n\nYeni görsel yüklenirse eski silinir."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Hero Slide",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/settings/hero-slide/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "settings", "hero-slide", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "slide-uuid-buraya"
+								}
+							]
+						},
+						"description": "Hero slide'ı ve görselini siler.\n\n**Auth gerekli!**"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "📤 Upload",
+			"description": "Dosya yükleme işlemleri",
+			"item": [
+				{
+					"name": "Upload Single File",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "",
+									"description": "Yüklenecek dosya (JPEG, PNG, WEBP, GIF)"
+								},
+								{
+									"key": "folder",
+									"value": "projects",
+									"type": "text",
+									"description": "Hedef klasör: projects, news, hero, general"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/upload",
+							"host": ["{{base_url}}"],
+							"path": ["api", "upload"]
+						},
+						"description": "Tek dosya yükler.\n\n**Auth gerekli!**\n\nDesteklenen formatlar: JPEG, PNG, WEBP, GIF\nMaksimum boyut: 10MB\n\nKlasörler:\n- projects: Proje görselleri\n- news: Haber görselleri\n- hero: Slider görselleri\n- general: Genel görseller"
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Multiple Files",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": "",
+									"description": "Yüklenecek dosyalar (maksimum 10)"
+								},
+								{
+									"key": "folder",
+									"value": "projects",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/upload/multiple",
+							"host": ["{{base_url}}"],
+							"path": ["api", "upload", "multiple"]
+						},
+						"description": "Çoklu dosya yükler (maksimum 10).\n\n**Auth gerekli!**\n\nGaleri görselleri için idealdir."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "🖼️ Gallery",
+			"description": "Galeri (Fotoğraf & Video) işlemleri\n\n⚡ Fotoğraflar 1.5MB'dan büyükse otomatik sıkıştırılır!",
+			"item": [
+				{
+					"name": "Get All Media",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/gallery",
+							"host": ["{{base_url}}"],
+							"path": ["api", "gallery"]
+						},
+						"description": "Tüm galeri öğelerini listeler (fotoğraf + video)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Images Only",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/gallery?type=image",
+							"host": ["{{base_url}}"],
+							"path": ["api", "gallery"],
+							"query": [
+								{
+									"key": "type",
+									"value": "image"
+								}
+							]
+						},
+						"description": "Sadece fotoğrafları listeler."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Videos Only",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/gallery?type=video",
+							"host": ["{{base_url}}"],
+							"path": ["api", "gallery"],
+							"query": [
+								{
+									"key": "type",
+									"value": "video"
+								}
+							]
+						},
+						"description": "Sadece videoları listeler."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Media by Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/gallery?category=proje",
+							"host": ["{{base_url}}"],
+							"path": ["api", "gallery"],
+							"query": [
+								{
+									"key": "category",
+									"value": "proje"
+								}
+							]
+						},
+						"description": "Kategoriye göre filtreler."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Media by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/gallery/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "gallery", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "media-uuid-buraya"
+								}
+							]
+						},
+						"description": "Tek bir medya öğesini getirir."
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Single Media",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "",
+									"description": "Fotoğraf veya video dosyası"
+								},
+								{
+									"key": "alt",
+									"value": "Görsel açıklaması",
+									"type": "text",
+									"description": "Alt metin (opsiyonel)"
+								},
+								{
+									"key": "category",
+									"value": "proje",
+									"type": "text",
+									"description": "Kategori (opsiyonel)"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/gallery/upload",
+							"host": ["{{base_url}}"],
+							"path": ["api", "gallery", "upload"]
+						},
+						"description": "Tek dosya yükler.\n\n**Auth gerekli!**\n\n⚡ Fotoğraflar 1.5MB'dan büyükse otomatik sıkıştırılır!\n\nDesteklenen formatlar:\n- Görsel: JPEG, PNG, WEBP, GIF\n- Video: MP4, WEBM, MOV, AVI\n\nMaksimum boyut: 50MB"
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Multiple Media",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": "",
+									"description": "Fotoğraf/video dosyaları (maks 20)"
+								},
+								{
+									"key": "category",
+									"value": "proje",
+									"type": "text",
+									"description": "Kategori (tümüne uygulanır)"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/gallery/upload/multiple",
+							"host": ["{{base_url}}"],
+							"path": ["api", "gallery", "upload", "multiple"]
+						},
+						"description": "Çoklu dosya yükler (maksimum 20).\n\n**Auth gerekli!**\n\n⚡ Fotoğraflar otomatik sıkıştırılır!"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Media Info",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"alt\": \"Yeni açıklama\",\n    \"category\": \"haber\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/gallery/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "gallery", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "media-uuid-buraya"
+								}
+							]
+						},
+						"description": "Medya bilgilerini günceller (alt text, kategori).\n\n**Auth gerekli!**"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Media",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/gallery/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "gallery", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "media-uuid-buraya"
+								}
+							]
+						},
+						"description": "Medyayı ve dosyasını siler.\n\n**Auth gerekli!**"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Multiple Media",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ids\": [\n        \"uuid-1\",\n        \"uuid-2\",\n        \"uuid-3\"\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/gallery/bulk",
+							"host": ["{{base_url}}"],
+							"path": ["api", "gallery", "bulk"]
+						},
+						"description": "Birden fazla medyayı toplu siler.\n\n**Auth gerekli!**"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "🩺 Health",
+			"description": "Sunucu sağlık kontrolü",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/health",
+							"host": ["{{base_url}}"],
+							"path": ["api", "health"]
+						},
+						"description": "Sunucunun çalışıp çalışmadığını kontrol eder."
+					},
+					"response": []
+				},
+				{
+					"name": "API Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/",
+							"host": ["{{base_url}}"],
+							"path": [""]
+						},
+						"description": "API bilgilerini ve tüm endpoint'leri listeler."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
+
