@@ -14,6 +14,7 @@ import {
   Image,
   ChevronRight,
   ExternalLink,
+  Users,
 } from 'lucide-react';
 import { authApi } from '@/lib/api';
 
@@ -23,6 +24,7 @@ const navigation = [
   { name: 'Haberler', href: '/admin/haberler', icon: Newspaper },
   { name: 'Kariyer', href: '/admin/kariyer', icon: Briefcase },
   { name: 'Galeri', href: '/admin/galeri', icon: Image },
+  { name: 'Referanslar', href: '/admin/referanslar', icon: Users },
   { name: 'Ayarlar', href: '/admin/ayarlar', icon: Settings },
 ];
 

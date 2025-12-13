@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin/', '/api/'],
       },
     ],
-    sitemap: 'https://ozpolatinsaat.com/sitemap.xml',
+    sitemap: 'https://ozpolatinsaat.tr/sitemap.xml',
   };
 }
 

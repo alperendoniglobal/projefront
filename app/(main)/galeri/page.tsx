@@ -14,20 +14,20 @@ const categories = [
   { id: 'etkinlik', name: 'Etkinlikler' },
 ];
 
-// Fallback demo images
+// Fallback demo images - API'den veri gelmezse kullanılır
 const demoImages: GalleryItem[] = [
-  { id: '1', type: 'image', url: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80', alt: 'Modern Konut Projesi', category: 'proje', createdAt: '', updatedAt: '' },
-  { id: '2', type: 'image', url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80', alt: 'Şantiye Çalışması', category: 'santiye', createdAt: '', updatedAt: '' },
-  { id: '3', type: 'image', url: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80', alt: 'Ekip Toplantısı', category: 'ekip', createdAt: '', updatedAt: '' },
-  { id: '4', type: 'image', url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80', alt: 'Ticaret Merkezi', category: 'proje', createdAt: '', updatedAt: '' },
-  { id: '5', type: 'image', url: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80', alt: 'İnşaat Alanı', category: 'santiye', createdAt: '', updatedAt: '' },
-  { id: '6', type: 'image', url: 'https://images.unsplash.com/photo-1531834685032-c34bf0d84c77?w=800&q=80', alt: 'Temel Atma Töreni', category: 'etkinlik', createdAt: '', updatedAt: '' },
-  { id: '7', type: 'image', url: 'https://images.unsplash.com/photo-1590725121839-892b458a74fe?w=800&q=80', alt: 'Villa Projesi', category: 'proje', createdAt: '', updatedAt: '' },
-  { id: '8', type: 'image', url: 'https://images.unsplash.com/photo-1517089596392-fb9a9033e05b?w=800&q=80', alt: 'Mühendislik Ekibi', category: 'ekip', createdAt: '', updatedAt: '' },
-  { id: '9', type: 'image', url: 'https://images.unsplash.com/photo-1429497419816-9ca5cfb4571a?w=800&q=80', alt: 'Beton Dökümü', category: 'santiye', createdAt: '', updatedAt: '' },
-  { id: '10', type: 'image', url: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80', alt: 'Rezidans Projesi', category: 'proje', createdAt: '', updatedAt: '' },
-  { id: '11', type: 'image', url: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80', alt: 'Teslim Töreni', category: 'etkinlik', createdAt: '', updatedAt: '' },
-  { id: '12', type: 'image', url: 'https://images.unsplash.com/photo-1513467535987-fd81bc7d62f8?w=800&q=80', alt: 'Kaba İnşaat', category: 'santiye', createdAt: '', updatedAt: '' },
+  { id: '1', type: 'image', url: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80', alt: 'Modern Konut Projesi', category: 'proje', createdAt: '' },
+  { id: '2', type: 'image', url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80', alt: 'Şantiye Çalışması', category: 'santiye', createdAt: '' },
+  { id: '3', type: 'image', url: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80', alt: 'Ekip Toplantısı', category: 'ekip', createdAt: '' },
+  { id: '4', type: 'image', url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80', alt: 'Ticaret Merkezi', category: 'proje', createdAt: '' },
+  { id: '5', type: 'image', url: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80', alt: 'İnşaat Alanı', category: 'santiye', createdAt: '' },
+  { id: '6', type: 'image', url: 'https://images.unsplash.com/photo-1531834685032-c34bf0d84c77?w=800&q=80', alt: 'Temel Atma Töreni', category: 'etkinlik', createdAt: '' },
+  { id: '7', type: 'image', url: 'https://images.unsplash.com/photo-1590725121839-892b458a74fe?w=800&q=80', alt: 'Villa Projesi', category: 'proje', createdAt: '' },
+  { id: '8', type: 'image', url: 'https://images.unsplash.com/photo-1517089596392-fb9a9033e05b?w=800&q=80', alt: 'Mühendislik Ekibi', category: 'ekip', createdAt: '' },
+  { id: '9', type: 'image', url: 'https://images.unsplash.com/photo-1429497419816-9ca5cfb4571a?w=800&q=80', alt: 'Beton Dökümü', category: 'santiye', createdAt: '' },
+  { id: '10', type: 'image', url: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80', alt: 'Rezidans Projesi', category: 'proje', createdAt: '' },
+  { id: '11', type: 'image', url: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80', alt: 'Teslim Töreni', category: 'etkinlik', createdAt: '' },
+  { id: '12', type: 'image', url: 'https://images.unsplash.com/photo-1513467535987-fd81bc7d62f8?w=800&q=80', alt: 'Kaba İnşaat', category: 'santiye', createdAt: '' },
 ];
 
 export default function GaleriPage() {

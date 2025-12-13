@@ -95,31 +95,36 @@ export default function Hero() {
         ))}
       </Swiper>
 
-      {/* Quick Links */}
-      <div className="absolute bottom-0 left-0 right-0 z-10">
+      {/* Quick Links - SADECE DESKTOP için floating design */}
+      <div className="absolute bottom-0 left-0 right-0 z-10 hidden md:block">
         <div className="container">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-0 -mb-20">
-            <div className="bg-primary p-8 md:p-10 flex items-center gap-5 hover:bg-primary-dark transition-colors cursor-pointer group">
-              <div className="w-16 h-16 rounded-full bg-dark/10 flex items-center justify-center group-hover:bg-dark/20 transition-colors">
-                <Building2 className="text-dark" size={32} />
+          <div className="grid grid-cols-3 -mb-20">
+            {/* Card 1: Bina Yapım İşleri */}
+            <div className="bg-primary p-8 lg:p-10 flex items-center gap-5 hover:bg-primary-dark transition-colors cursor-pointer group">
+              <div className="w-16 h-16 rounded-full bg-dark/10 flex items-center justify-center group-hover:bg-dark/20 transition-colors flex-shrink-0">
+                <Building2 className="text-dark w-8 h-8" />
               </div>
               <div>
                 <h4 className="text-dark font-semibold text-xl">Bina Yapım İşleri</h4>
                 <p className="text-dark/70 text-base">Anahtar teslim projeler</p>
               </div>
             </div>
-            <div className="bg-dark-light p-8 md:p-10 flex items-center gap-5 hover:bg-dark-lighter transition-colors cursor-pointer group">
-              <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
-                <HardHat className="text-primary" size={32} />
+            
+            {/* Card 2: Altyapı İşleri */}
+            <div className="bg-dark-light p-8 lg:p-10 flex items-center gap-5 hover:bg-dark-lighter transition-colors cursor-pointer group">
+              <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors flex-shrink-0">
+                <HardHat className="text-primary w-8 h-8" />
               </div>
               <div>
                 <h4 className="text-white font-semibold text-xl">Altyapı İşleri</h4>
                 <p className="text-gray-400 text-base">Yol ve altyapı projeleri</p>
               </div>
             </div>
-            <div className="bg-dark p-8 md:p-10 flex items-center gap-5 hover:bg-dark-light transition-colors cursor-pointer group">
-              <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
-                <Landmark className="text-primary" size={32} />
+            
+            {/* Card 3: Peyzaj İşleri */}
+            <div className="bg-dark p-8 lg:p-10 flex items-center gap-5 hover:bg-dark-light transition-colors cursor-pointer group">
+              <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors flex-shrink-0">
+                <Landmark className="text-primary w-8 h-8" />
               </div>
               <div>
                 <h4 className="text-white font-semibold text-xl">Peyzaj İşleri</h4>
@@ -127,6 +132,45 @@ export default function Hero() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBİL İÇİN AYRI SECTION
+═══════════════════════════════════════════════════════════════════════════ */
+export function MobileServicesSection() {
+  const services = [
+    { icon: Building2, title: 'Bina', desc: 'Anahtar teslim' },
+    { icon: HardHat, title: 'Altyapı', desc: 'Yol projeleri' },
+    { icon: Landmark, title: 'Peyzaj', desc: 'Çevre düzenleme' },
+  ];
+
+  return (
+    <section className="md:hidden bg-dark py-5">
+      <div className="px-4">
+        {/* Grid - eşit boyutlu kartlar */}
+        <div className="grid grid-cols-3 gap-3">
+          {services.map((service, index) => (
+            <motion.div
+              key={service.title}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+            >
+              {/* SABİT YÜKSEKLIK - tüm kartlar aynı boyut */}
+              <div className="bg-dark-light rounded-xl p-3 text-center border border-white/5 h-[120px] flex flex-col justify-center">
+                <div className="w-9 h-9 mx-auto mb-2 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <service.icon className="text-primary w-5 h-5" />
+                </div>
+                <h4 className="text-white font-medium text-sm">{service.title}</h4>
+                <p className="text-gray-500 text-[10px] mt-0.5 leading-tight">{service.desc}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

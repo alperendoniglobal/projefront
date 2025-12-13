@@ -14,6 +14,7 @@ export interface GalleryItem {
   alt?: string;
   category?: string;
   type: 'image' | 'video';
+  thumbnail?: string;  // Video için küçük resim
   createdAt: string;
 }
 

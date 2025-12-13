@@ -132,7 +132,7 @@ export default function KariyerPage() {
                           ))}
                         </ul>
                         <a
-                          href={`mailto:kariyer@ozpolatinsaat.com?subject=${encodeURIComponent(
+                          href={`mailto:kariyer@ozpolatinsaat.tr?subject=${encodeURIComponent(
                             career.title + ' Başvurusu'
                           )}`}
                           className="btn btn-primary"
@@ -154,8 +154,8 @@ export default function KariyerPage() {
                 </p>
                 <p className="text-gray-500 text-sm">
                   Özgeçmişinizi{' '}
-                  <a href="mailto:kariyer@ozpolatinsaat.com" className="text-primary hover:underline">
-                    kariyer@ozpolatinsaat.com
+                  <a href="mailto:kariyer@ozpolatinsaat.tr" className="text-primary hover:underline">
+                    kariyer@ozpolatinsaat.tr
                   </a>{' '}
                   adresine gönderebilirsiniz.
                 </p>
@@ -176,7 +176,7 @@ export default function KariyerPage() {
               <p className="text-gray-600 mb-6">
                 Özgeçmişinizi bize gönderin, uygun pozisyon açıldığında sizinle iletişime geçelim.
               </p>
-              <a href="mailto:kariyer@ozpolatinsaat.com" className="btn btn-primary">
+              <a href="mailto:kariyer@ozpolatinsaat.tr" className="btn btn-primary">
                 <Send size={16} />
                 Genel Başvuru Gönder
               </a>

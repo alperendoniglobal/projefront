@@ -1,17 +1,44 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, notFound } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Share2, Facebook, Twitter, Linkedin } from 'lucide-react';
-import { useStore } from '@/lib/store';
+import { newsApi, News } from '@/lib/api/news';
+import { getFileUrl } from '@/lib/api/client';
 
 export default function HaberDetayPage() {
   const params = useParams();
-  const { news } = useStore();
-  const newsItem = news.find((n) => n.slug === params.slug);
+  const [newsItem, setNewsItem] = useState<News | null>(null);
+  const [loading, setLoading] = useState(true);
 
+  // Haber detayını API'den çek
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const slug = params.slug as string;
+        const data = await newsApi.getById(slug);
+        setNewsItem(data);
+      } catch (error) {
+        console.error('Haber yüklenemedi:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchNews();
+  }, [params.slug]);
+
+  // Yükleniyor durumu
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  // Haber bulunamadı
   if (!newsItem) {
     notFound();
   }
@@ -33,7 +60,7 @@ export default function HaberDetayPage() {
       <section className="relative h-[60vh] min-h-[500px] flex items-end">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${newsItem.image})` }}
+          style={{ backgroundImage: `url(${getFileUrl(newsItem.image)})` }}
         >
           <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent" />
         </div>

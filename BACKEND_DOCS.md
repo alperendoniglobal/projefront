@@ -357,7 +357,7 @@ const generateSlug = (title: string): string => {
   "id": 1,
   "companyName": "Özpolat İnşaat",
   "phone": "+90 312 000 00 00",
-  "email": "info@ozpolatinsaat.com",
+  "email": "info@ozpolatinsaat.tr",
   "address": "Ankara, Türkiye",
   "workingHours": "Pazartesi - Cuma: 09:00 - 18:00",
   "socialMedia": {

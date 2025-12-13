@@ -10,7 +10,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://ozpolatinsaat.com'),
+  metadataBase: new URL('https://ozpolatinsaat.tr'),
   title: {
     default: 'Özpolat İnşaat | Güvenilir İnşaat ve Taahhüt Hizmetleri',
     template: '%s | Özpolat İnşaat',
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'tr_TR',
-    url: 'https://ozpolatinsaat.com',
+    url: 'https://ozpolatinsaat.tr',
     siteName: 'Özpolat İnşaat',
     title: 'Özpolat İnşaat | Güvenilir İnşaat ve Taahhüt Hizmetleri',
     description:
@@ -78,7 +78,7 @@ export const metadata: Metadata = {
     google: 'google-site-verification-code',
   },
   alternates: {
-    canonical: 'https://ozpolatinsaat.com',
+    canonical: 'https://ozpolatinsaat.tr',
   },
 };
 
@@ -102,8 +102,8 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'Organization',
               name: 'Özpolat İnşaat',
-              url: 'https://ozpolatinsaat.com',
-              logo: 'https://ozpolatinsaat.com/logo.png',
+              url: 'https://ozpolatinsaat.tr',
+              logo: 'https://ozpolatinsaat.tr/logo.png',
               description:
                 'Özpolat İnşaat, 2004 yılından bu yana Türkiye genelinde konut, ticari ve altyapı projelerinde kaliteli inşaat hizmetleri sunmaktadır.',
               address: {

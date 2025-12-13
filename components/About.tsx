@@ -8,12 +8,7 @@ import { useRef } from 'react';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useSettings } from '@/lib/context';
 
-const features = [
-  'Kaliteli ve güvenilir yapı malzemeleri',
-  'Deneyimli mühendis ve teknik kadro',
-  'Zamanında teslim garantisi',
-  'Müşteri memnuniyeti odaklı hizmet',
-];
+
 
 export default function About() {
   const { settings } = useSettings();
@@ -63,23 +58,10 @@ export default function About() {
                 <span className="text-primary">güvenle</span> inşa ediyoruz...
               </h2>
             </div>
-            <p className="text-gray-600 leading-loose text-lg lg:text-xl">
+            <p className="text-gray-600 leading-loose text-md ">
               {settings.aboutText}
             </p>
-            <ul className="space-y-5">
-              {features.map((feature, index) => (
-                <motion.li
-                  key={index}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-                  className="flex items-center gap-4"
-                >
-                  <CheckCircle2 className="text-primary flex-shrink-0" size={28} />
-                  <span className="text-gray-700 text-lg lg:text-xl">{feature}</span>
-                </motion.li>
-              ))}
-            </ul>
+   
             <div className="pt-4">
               <Link href="/kurumsal" className="btn btn-primary text-base px-10 py-4">
                 Hakkımızda
