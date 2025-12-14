@@ -28,9 +28,10 @@ export { settingsApi, type Settings, type HeroSlide, type SocialMedia, type Stat
 export { uploadApi, type UploadResponse, type MultiUploadResponse, type UploadFolder } from './upload';
 export { galleryApi, type GalleryItem, type UploadResult } from './gallery';
 export { referencesApi, type Reference, type CreateReferenceDto, type UpdateReferenceDto } from './references';
+export { contactApi, type Contact, type CreateContactDto, type UpdateContactDto } from './contact';
 
 // Health check
 export const healthCheck = async (): Promise<{ status: string; message: string }> => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/health`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://ozpolatinsaat.tr/backend'}/api/health`);
   return response.json();
 };

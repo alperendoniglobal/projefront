@@ -2,8 +2,10 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Phone, Mail, Clock, Send, CheckCircle } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import { useSettings } from '@/lib/context';
+import { contactApi, type CreateContactDto } from '@/lib/api';
+import { LocalBusinessJsonLd, BreadcrumbJsonLd } from '@/components/SEO/JsonLd';
 
 export default function IletisimPage() {
   const { settings } = useSettings();
@@ -16,26 +18,43 @@ export default function IletisimPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    // Hata varsa temizle
+    if (error) setError(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
-    
-    setTimeout(() => setIsSubmitted(false), 5000);
+    setError(null);
+
+    try {
+      const payload: CreateContactDto = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone || undefined,
+        subject: formData.subject as CreateContactDto['subject'],
+        message: formData.message,
+      };
+
+      await contactApi.create(payload);
+      
+      setIsSubmitted(true);
+      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+      
+      setTimeout(() => setIsSubmitted(false), 5000);
+    } catch (err) {
+      console.error('Form gönderme hatası:', err);
+      setError(err instanceof Error ? err.message : 'Mesaj gönderilemedi. Lütfen tekrar deneyin.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
@@ -65,6 +84,15 @@ export default function IletisimPage() {
 
   return (
     <>
+      {/* JSON-LD Şemaları */}
+      <LocalBusinessJsonLd />
+      <BreadcrumbJsonLd 
+        items={[
+          { name: 'Ana Sayfa', url: 'https://ozpolatinsaat.tr' },
+          { name: 'İletişim', url: 'https://ozpolatinsaat.tr/iletisim' },
+        ]} 
+      />
+
       {/* Hero Section */}
       <section className="relative h-[50vh] min-h-[400px] flex items-center justify-center">
         <div
@@ -130,15 +158,17 @@ export default function IletisimPage() {
               {/* Map */}
               <div className="mt-8">
                 <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden">
-                  <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d195884.2699505623!2d32.62347815!3d39.9035099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14d347d520732db1%3A0xbdc57b0c0842b8d!2sAnkara!5e0!3m2!1str!2str!4v1234567890"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                  />
+                  {settings.address && (
+                    <iframe
+                      src={`https://www.google.com/maps?q=${encodeURIComponent(settings.address)}&output=embed`}
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    />
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -159,8 +189,19 @@ export default function IletisimPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3"
                   >
-                    <CheckCircle className="text-green-600" size={20} />
+                    <CheckCircle className="text-green-600 flex-shrink-0" size={20} />
                     <span className="text-green-700">Mesajınız başarıyla gönderildi. En kısa sürede sizinle iletişime geçeceğiz.</span>
+                  </motion.div>
+                )}
+
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3"
+                  >
+                    <AlertCircle className="text-red-600 flex-shrink-0" size={20} />
+                    <span className="text-red-700">{error}</span>
                   </motion.div>
                 )}
 
@@ -225,11 +266,11 @@ export default function IletisimPage() {
                         className="w-full"
                       >
                         <option value="">Konu Seçiniz</option>
-                        <option value="genel">Genel Bilgi</option>
-                        <option value="teklif">Teklif Talebi</option>
-                        <option value="isbirligi">İş Birliği</option>
-                        <option value="sikayet">Şikayet / Öneri</option>
-                        <option value="diger">Diğer</option>
+                        <option value="Genel Bilgi">Genel Bilgi</option>
+                        <option value="Teklif Talebi">Teklif Talebi</option>
+                        <option value="İş Birliği">İş Birliği</option>
+                        <option value="Şikayet / Öneri">Şikayet / Öneri</option>
+                        <option value="Diğer">Diğer</option>
                       </select>
                     </div>
                   </div>
@@ -274,4 +315,3 @@ export default function IletisimPage() {
     </>
   );
 }
-

@@ -15,11 +15,13 @@ import {
   ChevronRight,
   ExternalLink,
   Users,
+  Mail,
 } from 'lucide-react';
-import { authApi } from '@/lib/api';
+import { authApi, contactApi } from '@/lib/api';
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { name: 'Mesajlar', href: '/admin/mesajlar', icon: Mail, hasBadge: true },
   { name: 'Projeler', href: '/admin/projeler', icon: FolderKanban },
   { name: 'Haberler', href: '/admin/haberler', icon: Newspaper },
   { name: 'Kariyer', href: '/admin/kariyer', icon: Briefcase },
@@ -34,6 +36,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [checking, setChecking] = useState(true);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     if (pathname === '/admin/login') {
@@ -46,6 +49,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         if (authApi.isAuthenticated()) {
           await authApi.check();
           setIsAuthenticated(true);
+          // Okunmamış mesaj sayısını al
+          try {
+            const count = await contactApi.getUnreadCount();
+            setUnreadCount(count);
+          } catch (e) {
+            console.error('Unread count fetch error:', e);
+          }
         } else {
           router.push('/admin/login');
         }
@@ -120,6 +130,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {navigation.map((item) => {
               const isActive = pathname === item.href || 
                 (item.href !== '/admin' && pathname.startsWith(item.href));
+              const showBadge = item.hasBadge && unreadCount > 0;
               return (
                 <Link
                   key={item.name}
@@ -133,7 +144,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 >
                   <item.icon size={20} className={isActive ? 'text-slate-900' : 'text-slate-400 group-hover:text-primary'} />
                   <span className="font-medium">{item.name}</span>
-                  {isActive && <ChevronRight size={16} className="ml-auto" />}
+                  {showBadge && (
+                    <span className="ml-auto bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                      {unreadCount}
+                    </span>
+                  )}
+                  {isActive && !showBadge && <ChevronRight size={16} className="ml-auto" />}
                 </Link>
               );
             })}

@@ -1,15 +1,20 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Bize Ulaşın',
-  description: 'Özpolat İnşaat ile iletişime geçin. Adres, telefon, e-posta bilgilerimiz ve iletişim formu ile bize ulaşabilirsiniz.',
+  title: 'İletişim',
+  description: 'Özpolat İnşaat ile iletişime geçin. Ankara merkezli ofisimize ulaşın, teklif alın veya sorularınızı iletin.',
+  keywords: ['iletişim', 'adres', 'telefon', 'e-posta', 'özpolat iletişim', 'ankara inşaat iletişim', 'teklif al'],
   openGraph: {
-    title: 'Bize Ulaşın | Özpolat İnşaat',
-    description: 'Özpolat İnşaat ile iletişime geçin.',
+    title: 'İletişim | Özpolat İnşaat',
+    description: 'Özpolat İnşaat ile iletişime geçin. Teklif alın veya sorularınızı iletin.',
+    url: 'https://ozpolatinsaat.tr/iletisim',
+    type: 'website',
+  },
+  alternates: {
+    canonical: 'https://ozpolatinsaat.tr/iletisim',
   },
 };
 
 export default function IletisimLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
-

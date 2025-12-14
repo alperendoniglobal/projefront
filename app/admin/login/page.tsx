@@ -71,7 +71,7 @@ export default function AdminLoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Admin şifrenizi girin"
-                  className="w-full pl-12 pr-12"
+                  className="w-full h-12 pl-12 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all"
                   required
                 />
                 <button
@@ -109,10 +109,6 @@ export default function AdminLoginPage() {
               )}
             </button>
           </form>
-
-          <p className="text-center text-gray-400 text-sm mt-6">
-            Varsayılan şifre: <code className="bg-gray-100 px-2 py-1 rounded">ozpolat2024</code>
-          </p>
         </div>
       </motion.div>
     </div>

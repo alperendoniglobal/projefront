@@ -1,16 +1,20 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Galeri | Özpolat İnşaat',
-  description: 'Özpolat İnşaat projelerinden, şantiyelerinden ve etkinliklerinden fotoğraflar. Galeri sayfamızda çalışmalarımızı inceleyin.',
-  keywords: ['galeri', 'fotoğraflar', 'inşaat projeleri', 'şantiye', 'özpolat inşaat'],
+  title: 'Galeri',
+  description: 'Özpolat İnşaat proje galerisi. Tamamlanan ve devam eden projelerimizin fotoğraflarını inceleyin.',
+  keywords: ['galeri', 'proje fotoğrafları', 'inşaat görselleri', 'özpolat galeri', 'proje görselleri'],
+  openGraph: {
+    title: 'Galeri | Özpolat İnşaat',
+    description: 'Özpolat İnşaat proje galerisi. Projelerimizin fotoğraflarını inceleyin.',
+    url: 'https://ozpolatinsaat.tr/galeri',
+    type: 'website',
+  },
+  alternates: {
+    canonical: 'https://ozpolatinsaat.tr/galeri',
+  },
 };
 
-export default function GaleriLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return children;
+export default function GaleriLayout({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
 }
-

@@ -75,9 +75,11 @@ export default function Hero() {
                   transition={{ duration: 0.8, delay: 0.2 }}
                   className="max-w-3xl text-white"
                 >
-                  <span className="inline-block px-5 py-2 bg-primary/20 border border-primary/30 rounded-full text-primary text-sm font-medium mb-6">
-                    {slide.subtitle}
-                  </span>
+                  {slide.subtitle && (
+                    <span className="inline-block px-5 py-2 bg-primary/20 border border-primary/30 rounded-full text-primary text-sm font-medium mb-6">
+                      {slide.subtitle}
+                    </span>
+                  )}
                   <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight">
                     {slide.title}
                   </h1>

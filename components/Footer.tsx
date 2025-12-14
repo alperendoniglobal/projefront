@@ -168,35 +168,14 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Partners Section */}
-      <div className="border-t border-[#222]">
-        <div className="max-w-[1800px] mx-auto px-8 lg:px-16 py-10">
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 lg:gap-24">
-            <span className="text-[#666] font-semibold text-sm tracking-widest">AFAD</span>
-            <span className="text-[#666] font-semibold text-sm tracking-widest">TOKİ</span>
-            <span className="text-[#666] font-semibold text-sm tracking-widest">İLBANK</span>
-            <span className="text-[#666] font-semibold text-sm tracking-widest">ZİRAAT BANKASI</span>
-            <span className="text-[#666] font-semibold text-sm tracking-widest">GENÇLİK VE SPOR BAKANLIĞI</span>
-          </div>
-        </div>
-      </div>
 
-      {/* Bottom Bar */}
+      {/* Bottom Bar - Gizlilik Politikası ve KVKK kaldırıldı */}
       <div className="border-t border-[#222]">
         <div className="max-w-[1800px] mx-auto px-8 lg:px-16 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-[#666] text-sm">
+          <div className="flex justify-center items-center">
+            <p className="text-[#666] text-sm text-center">
               © {new Date().getFullYear()} {settings.companyName}. Tüm Hakları Saklıdır.
             </p>
-            <div className="flex items-center gap-6">
-              <Link href="/gizlilik-politikasi" className="text-[#666] hover:text-primary text-sm transition-colors">
-                Gizlilik Politikası
-              </Link>
-              <span className="text-[#333]">|</span>
-              <Link href="/kvkk" className="text-[#666] hover:text-primary text-sm transition-colors">
-                KVKK
-              </Link>
-            </div>
           </div>
         </div>
       </div>

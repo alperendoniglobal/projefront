@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Plus, Pencil, Trash2, Search, X, Loader2, Upload } from 'lucide-react';
 import { newsApi, type News, type CreateNewsDto, getFileUrl, getToken } from '@/lib/api';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://ozpolatinsaat.tr/backend';
 
 export default function AdminHaberlerPage() {
   const [news, setNews] = useState<News[]>([]);
